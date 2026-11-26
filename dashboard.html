@@ -1,0 +1,1039 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SportsHub | Management Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background: #0b1120;
+    color: #e5e7eb;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    background: #111827;
+    border-right: 1px solid #263247;
+    padding: 25px 18px;
+    position: fixed;
+    height: 100vh;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 35px;
+}
+
+.logo span {
+    color: #38bdf8;
+}
+
+.nav-title {
+    color: #64748b;
+    font-size: 12px;
+    margin: 20px 10px 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-btn {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 8px;
+    color: #94a3b8;
+    background: transparent;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: #1e293b;
+    color: #38bdf8;
+}
+
+.main {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+    padding: 30px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.topbar h1 {
+    font-size: 27px;
+}
+
+.subtitle {
+    color: #94a3b8;
+    margin-top: 7px;
+    font-size: 14px;
+}
+
+.admin {
+    background: #1e293b;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.card {
+    background: #111827;
+    border: 1px solid #263247;
+    padding: 22px;
+    border-radius: 14px;
+}
+
+.card-title {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.card-value {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 14px;
+    color: white;
+}
+
+.card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.section {
+    background: #111827;
+    border: 1px solid #263247;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.section-header h2 {
+    font-size: 19px;
+}
+
+.btn {
+    background: #0284c7;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn:hover {
+    background: #0369a1;
+}
+
+.btn-danger {
+    background: #dc2626;
+}
+
+.btn-small {
+    padding: 6px 10px;
+    font-size: 12px;
+    margin: 2px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    color: #94a3b8;
+    text-align: left;
+    padding: 13px;
+    font-size: 13px;
+    border-bottom: 1px solid #263247;
+}
+
+td {
+    padding: 14px 13px;
+    border-bottom: 1px solid #1e293b;
+    font-size: 14px;
+}
+
+tr:hover {
+    background: #172033;
+}
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #172554;
+    color: #60a5fa;
+    font-size: 12px;
+}
+
+.empty {
+    color: #64748b;
+    text-align: center;
+    padding: 25px;
+}
+
+input, select {
+    width: 100%;
+    padding: 11px;
+    margin: 7px 0 15px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 7px;
+}
+
+label {
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 15px;
+}
+
+.modal-box {
+    background: #111827;
+    border: 1px solid #334155;
+    padding: 25px;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-box h2 {
+    margin-bottom: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-secondary {
+    background: #334155;
+}
+
+.message {
+    color: #38bdf8;
+    margin-bottom: 12px;
+}
+
+@media(max-width: 950px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    .sidebar {
+        width: 65px;
+        padding: 15px 8px;
+    }
+
+    .logo {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .nav-title {
+        display: none;
+    }
+
+    .nav-btn {
+        font-size: 0;
+        text-align: center;
+        padding: 12px 4px;
+    }
+
+    .main {
+        margin-left: 65px;
+        width: calc(100% - 65px);
+        padding: 15px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card-value {
+        font-size: 23px;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    .section {
+        overflow-x: auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="logo">🏆 Sports<span>Hub</span></div>
+
+    <div class="nav-title">Management</div>
+
+    <button class="nav-btn active" onclick="showSection('dashboard')">
+        🏠 Dashboard
+    </button>
+
+    <button class="nav-btn" onclick="showSection('events')">
+        🏟️ Events
+    </button>
+
+    <button class="nav-btn" onclick="showSection('teams')">
+        👥 Teams
+    </button>
+
+    <button class="nav-btn" onclick="showSection('players')">
+        🧑 Players
+    </button>
+
+    <button class="nav-btn" onclick="showSection('matches')">
+        ⚽ Matches
+    </button>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+    <header class="topbar">
+        <div>
+            <h1 id="pageTitle">Dashboard</h1>
+            <p class="subtitle">Sports Event Management System</p>
+        </div>
+
+        <div class="admin">👤 Administrator</div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard">
+
+        <div class="stats">
+            <div class="card">
+                <div class="card-icon">🏆</div>
+                <div class="card-title">Total Events</div>
+                <div class="card-value" id="eventCount">0</div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <div class="card-title">Total Teams</div>
+                <div class="card-value" id="teamCount">0</div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🧑</div>
+                <div class="card-title">Total Players</div>
+                <div class="card-value" id="playerCount">0</div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚽</div>
+                <div class="card-title">Total Matches</div>
+                <div class="card-value" id="matchCount">0</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <!-- SPORTS ANALYTICS -->
+<section style="margin:25px 0;">
+    <h2 style="color:white; margin-bottom:18px;">
+        📊 Sports Analytics
+    </h2>
+
+    <div style="
+        background:#151c2c;
+        padding:25px;
+        border-radius:16px;
+        border:1px solid #27334a;
+        max-width:700px;
+    ">
+        <h3 style="color:#cbd5e1; margin-bottom:20px;">
+            Overall Statistics
+        </h3>
+
+        <canvas id="sportsAnalyticsChart"></canvas>
+    </div>
+</section>
+                <h2>Recent Events</h2>
+                <button class="btn" onclick="showSection('events')">
+                    View Events →
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Sport</th>
+                        <th>Venue</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentEvents"></tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>Recent Matches</h2>
+                <button class="btn" onclick="showSection('matches')">
+                    View Matches →
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Team 1</th>
+                        <th>Team 2</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentMatches"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div id="events" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <h2>Event Management</h2>
+                <button class="btn" onclick="openModal('eventModal')">
+                    + Add Event
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Name</th>
+                        <th>Sport</th>
+                        <th>Venue</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="eventsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TEAMS -->
+    <div id="teams" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <h2>Team Management</h2>
+                <button class="btn" onclick="openModal('teamModal')">
+                    + Add Team
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Team Name</th>
+                        <th>Captain</th>
+                        <th>Event</th>
+                    </tr>
+                </thead>
+                <tbody id="teamsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PLAYERS -->
+    <div id="players" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <h2>Player Management</h2>
+                <button class="btn" onclick="openModal('playerModal')">
+                    + Add Player
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Player Name</th>
+                        <th>Age</th>
+                        <th>Team</th>
+                    </tr>
+                </thead>
+                <tbody id="playersTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MATCHES -->
+    <div id="matches" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <h2>Match Management</h2>
+                <button class="btn" onclick="openModal('matchModal')">
+                    + Schedule Match
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event</th>
+                        <th>Team 1</th>
+                        <th>Team 2</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Winner</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="matchesTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+</div>
+
+<!-- EVENT MODAL -->
+<div class="modal" id="eventModal">
+<div class="modal-box">
+    <h2>Create Event</h2>
+
+    <form id="eventForm">
+        <label>Event Name</label>
+        <input name="event_name" required>
+
+        <label>Sport</label>
+        <input name="sport" required>
+
+        <label>Venue</label>
+        <input name="venue" required>
+
+        <label>Event Date</label>
+        <input name="event_date" type="date" required>
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary"
+                onclick="closeModal('eventModal')">Cancel</button>
+            <button class="btn">Create Event</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<!-- TEAM MODAL -->
+<div class="modal" id="teamModal">
+<div class="modal-box">
+    <h2>Register Team</h2>
+
+    <form id="teamForm">
+        <label>Team Name</label>
+        <input name="team_name" required>
+
+        <label>Captain</label>
+        <input name="captain" required>
+
+        <label>Event</label>
+        <select name="event_id" id="teamEvent" required></select>
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary"
+                onclick="closeModal('teamModal')">Cancel</button>
+            <button class="btn">Register Team</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<!-- PLAYER MODAL -->
+<div class="modal" id="playerModal">
+<div class="modal-box">
+    <h2>Register Player</h2>
+
+    <form id="playerForm">
+        <label>Player Name</label>
+        <input name="player_name" required>
+
+        <label>Age</label>
+        <input name="age" type="number" min="1" required>
+
+        <label>Team</label>
+        <select name="team_id" id="playerTeam" required></select>
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary"
+                onclick="closeModal('playerModal')">Cancel</button>
+            <button class="btn">Add Player</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<!-- MATCH MODAL -->
+<div class="modal" id="matchModal">
+<div class="modal-box">
+    <h2>Schedule Match</h2>
+
+    <form id="matchForm">
+        <label>Event</label>
+        <select name="event_id" id="matchEvent" required></select>
+
+        <label>Team 1</label>
+        <select name="team1_id" id="matchTeam1" required></select>
+
+        <label>Team 2</label>
+        <select name="team2_id" id="matchTeam2" required></select>
+
+        <label>Match Date</label>
+        <input name="match_date" type="date" required>
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary"
+                onclick="closeModal('matchModal')">Cancel</button>
+            <button class="btn">Schedule</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<script>
+const API = "";
+
+let events = [];
+let teams = [];
+let players = [];
+let matches = [];
+
+function showSection(section) {
+    ["dashboard", "events", "teams", "players", "matches"]
+        .forEach(id => {
+            document.getElementById(id).style.display =
+                id === section ? "block" : "none";
+        });
+
+    document.getElementById("pageTitle").textContent =
+        section.charAt(0).toUpperCase() + section.slice(1);
+
+    document.querySelectorAll(".nav-btn").forEach(btn =>
+        btn.classList.remove("active")
+    );
+
+    event.currentTarget?.classList.add("active");
+}
+
+function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+async function getData(url) {
+    const response = await fetch(API + url);
+    if (!response.ok) throw new Error("API request failed");
+    return response.json();
+}
+
+function fillSelect(id, data, key, label) {
+    const select = document.getElementById(id);
+    select.innerHTML = `<option value="">Select</option>`;
+
+    data.forEach(item => {
+        select.innerHTML +=
+            `<option value="${item[key]}">${item[label]}</option>`;
+    });
+}
+
+async function loadData() {
+    try {
+        [events, teams, players, matches] = await Promise.all([
+            getData("/events"),
+            getData("/teams"),
+            getData("/players"),
+            getData("/matches")
+        ]);
+
+        renderAll();
+    } catch (error) {
+        alert("Unable to connect to API. Make sure Flask is running.");
+        console.error(error);
+    }
+}
+
+function renderAll() {
+    document.getElementById("eventCount").textContent = events.length;
+    document.getElementById("teamCount").textContent = teams.length;
+    document.getElementById("playerCount").textContent = players.length;
+    document.getElementById("matchCount").textContent = matches.length;
+
+    renderEvents();
+    renderTeams();
+    renderPlayers();
+    renderMatches();
+
+    fillSelect("teamEvent", events, "id", "event_name");
+    fillSelect("matchEvent", events, "id", "event_name");
+    fillSelect("playerTeam", teams, "id", "team_name");
+    fillSelect("matchTeam1", teams, "id", "team_name");
+    fillSelect("matchTeam2", teams, "id", "team_name");
+}
+
+function renderEvents() {
+    const rows = events.map(e => `
+        <tr>
+            <td>${e.id}</td>
+            <td>${e.event_name}</td>
+            <td>${e.sport}</td>
+            <td>${e.venue}</td>
+            <td>${e.event_date}</td>
+            <td><span class="badge">${e.status}</span></td>
+            <td>
+                <button class="btn btn-danger btn-small"
+                    onclick="deleteEvent(${e.id})">Delete</button>
+            </td>
+        </tr>
+    `).join("");
+
+    document.getElementById("eventsTable").innerHTML =
+        rows || `<tr><td colspan="7" class="empty">No events found</td></tr>`;
+
+    document.getElementById("recentEvents").innerHTML =
+        events.slice(-5).reverse().map(e => `
+            <tr>
+                <td>${e.event_name}</td>
+                <td>${e.sport}</td>
+                <td>${e.venue}</td>
+                <td>${e.event_date}</td>
+                <td><span class="badge">${e.status}</span></td>
+            </tr>
+        `).join("") || `<tr><td colspan="5" class="empty">No events</td></tr>`;
+}
+
+function renderTeams() {
+    document.getElementById("teamsTable").innerHTML =
+        teams.map(t => `
+            <tr>
+                <td>${t.id}</td>
+                <td>${t.team_name}</td>
+                <td>${t.captain}</td>
+                <td>${t.event_name || t.event_id}</td>
+            </tr>
+        `).join("") || `<tr><td colspan="4" class="empty">No teams found</td></tr>`;
+}
+
+function renderPlayers() {
+    document.getElementById("playersTable").innerHTML =
+        players.map(p => `
+            <tr>
+                <td>${p.id}</td>
+                <td>${p.player_name}</td>
+                <td>${p.age}</td>
+                <td>${p.team_name || p.team_id}</td>
+            </tr>
+        `).join("") || `<tr><td colspan="4" class="empty">No players found</td></tr>`;
+}
+
+function renderMatches() {
+    const rows = matches.map(m => `
+        <tr>
+            <td>${m.id}</td>
+            <td>${m.event_name || m.event_id}</td>
+            <td>${m.team1_name || m.team1_id}</td>
+            <td>${m.team2_name || m.team2_id}</td>
+            <td>${m.match_date}</td>
+            <td>${m.score1} - ${m.score2}</td>
+            <td>${m.winner || "Pending"}</td>
+            <td>
+                <button class="btn btn-small"
+                    onclick="updateScore(${m.id})">Score</button>
+            </td>
+        </tr>
+    `).join("");
+
+    document.getElementById("matchesTable").innerHTML =
+        rows || `<tr><td colspan="8" class="empty">No matches found</td></tr>`;
+
+    document.getElementById("recentMatches").innerHTML =
+        matches.slice(-5).reverse().map(m => `
+            <tr>
+                <td>${m.event_name || m.event_id}</td>
+                <td>${m.team1_name || m.team1_id}</td>
+                <td>${m.team2_name || m.team2_id}</td>
+                <td>${m.score1} - ${m.score2}</td>
+                <td><span class="badge">${m.status}</span></td>
+            </tr>
+        `).join("") || `<tr><td colspan="5" class="empty">No matches</td></tr>`;
+}
+
+async function sendData(url, data, method = "POST") {
+    const response = await fetch(API + url, {
+        method,
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        alert(result.message || result.error || "Operation failed");
+        return false;
+    }
+
+    alert(result.message || "Success!");
+    await loadData();
+    return true;
+}
+
+document.getElementById("eventForm").onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    if (await sendData("/events", data)) {
+        this.reset();
+        closeModal("eventModal");
+    }
+};
+
+document.getElementById("teamForm").onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    data.event_id = Number(data.event_id);
+
+    if (await sendData("/teams", data)) {
+        this.reset();
+        closeModal("teamModal");
+    }
+};
+
+document.getElementById("playerForm").onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+    data.age = Number(data.age);
+    data.team_id = Number(data.team_id);
+
+    if (await sendData("/players", data)) {
+        this.reset();
+        closeModal("playerModal");
+    }
+};
+
+document.getElementById("matchForm").onsubmit = async function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(this));
+
+    data.event_id = Number(data.event_id);
+    data.team1_id = Number(data.team1_id);
+    data.team2_id = Number(data.team2_id);
+
+    if (await sendData("/matches", data)) {
+        this.reset();
+        closeModal("matchModal");
+    }
+};
+
+async function deleteEvent(id) {
+    if (!confirm("Delete this event?")) return;
+
+    const response = await fetch(`/events/${id}`, {
+        method: "DELETE"
+    });
+
+    if (response.ok) {
+        alert("Event deleted successfully");
+        loadData();
+    } else {
+        alert("Unable to delete event");
+    }
+}
+
+async function updateScore(id) {
+    const score1 = prompt("Enter Team 1 Score:");
+    if (score1 === null) return;
+
+    const score2 = prompt("Enter Team 2 Score:");
+    if (score2 === null) return;
+
+    await sendData(`/matches/${id}/score`, {
+        score1: Number(score1),
+        score2: Number(score2)
+    }, "PUT");
+}
+
+loadData();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+(async function () {
+
+    async function getCount(url) {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (Array.isArray(data)) {
+                return data.length;
+            }
+
+            if (data && typeof data === "object") {
+                for (const key of Object.keys(data)) {
+                    if (Array.isArray(data[key])) {
+                        return data[key].length;
+                    }
+                }
+            }
+
+            return 0;
+
+        } catch (error) {
+            return 0;
+        }
+    }
+
+    const events = await getCount("/events");
+    const teams = await getCount("/teams");
+    const players = await getCount("/players");
+    const matches = await getCount("/matches");
+
+    const canvas = document.getElementById("sportsAnalyticsChart");
+
+    if (!canvas) return;
+
+    new Chart(canvas, {
+        type: "bar",
+
+        data: {
+            labels: ["Events", "Teams", "Players", "Matches"],
+
+            datasets: [{
+                label: "Total Count",
+
+                data: [events, teams, players, matches],
+
+                backgroundColor: [
+                    "#6366f1",
+                    "#06b6d4",
+                    "#10b981",
+                    "#f59e0b"
+                ],
+
+                borderRadius: 8,
+                barThickness: 45
+            }]
+        },
+
+        options: {
+            responsive: true,
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            scales: {
+                x: {
+                    ticks: {
+                        color: "#cbd5e1"
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: "#cbd5e1",
+                        stepSize: 1
+                    },
+                    grid: {
+                        color: "rgba(255,255,255,0.08)"
+                    }
+                }
+            }
+        }
+    });
+
+})();
+</script>
+</body>
+</html>
